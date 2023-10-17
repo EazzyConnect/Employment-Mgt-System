@@ -2,7 +2,7 @@ const express = require ("express");
 const app = express();
 const router = express.Router();
 const {Employer, User, Job} = require ("../model/db");
-const { employerSignUp, userSignUp, employerLogin, userLogin, logout, createJob, EmpChangePassword, UserChangePassword, apply, updateProfile, getProfile, getEmployerProfile, viewApplicants } = require("../controllers/auth");
+const { employerSignUp, userSignUp, employerLogin, userLogin, logout, createJob, EmpChangePassword, UserChangePassword, apply, updateProfile, getProfile, getEmployerProfile, viewApplicants, userAppList } = require("../controllers/auth");
 const { authorized, authorizedUser } = require("../middleware/midAuth");
 
 app.use(express.json());
@@ -46,5 +46,9 @@ router.get("/employer/profile", authorized, getEmployerProfile)
 
 // VIEW APPLICANTS
 router.get("/employer/jobs-applicants", authorized, viewApplicants)
+
+// USER VIEW JOB APPLIED FOR
+router.get("/user/jobs/application-list", authorizedUser, userAppList)
+
 
 module.exports = router;

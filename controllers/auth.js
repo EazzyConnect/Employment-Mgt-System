@@ -224,12 +224,22 @@ module.exports.getEmployerProfile = asynErrHand(async (req, res) => {
 // EMPLOYER VIEW APPLICANTS
 module.exports.viewApplicants = asynErrHand(async (req, res) => {
   const {title} = req.body
-const jobList = await Job.find({title});
-  // console.log(`@empl`, req.user.jobsPosted);
-if (!jobList || jobList.length === 0){
+  const jobList = await Job.find({title});
+  if (!jobList || jobList.length === 0){
   const script = "<script> alert ('No job found'); window.location.href = '/auth/employer/profile' </script>";
   return res.send(script);
 }
-return res.json({data: jobList})
-// const applicants = await 
+  const applicants = await User.find({ "jobsAppliedFor.title": title }, "firstName lastName email");
+  return res.json({ data: applicants});
 })
+
+// USER VIEW JOB APPLIED FOR
+module.exports.userAppList = asynErrHand(async (req, res) => {
+  const findJobs = await User.findById({_id: req.user._id}, "jobsAppliedFor")
+  if(!findJobs || req.user.jobsAppliedFor.length === 0){
+    const script = "<script> alert ('No job applied for yet'); window.location.href = '/auth/user/profile' </script>";
+    return res.send(script)
+  }
+  return res.json({data: findJobs, success: true})
+})
+
