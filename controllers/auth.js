@@ -230,6 +230,9 @@ module.exports.viewApplicants = asynErrHand(async (req, res) => {
   return res.send(script);
 }
   const applicants = await User.find({ "jobsAppliedFor.title": title }, "firstName lastName email");
+  if (!applicants || applicants.length === 0){
+    return res.json({message: "No applicant yet."})
+  }
   return res.json({ data: applicants});
 })
 
