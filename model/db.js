@@ -1,5 +1,7 @@
 const mongoose = require ("mongoose");
+const dotenv = require("dotenv")
 
+require("dotenv").config()
 
 const genderEnum = ["Male", "Female"];
 
@@ -58,7 +60,11 @@ const User = new mongoose.model("users", userSchema);
 const Job = new mongoose.model("jobs", jobSchema);
 
 const connection = async () => {
- await mongoose.connect("mongodb://127.0.0.1:27017/EmploymentMgtSys")
+ const MongoDbUrl = process.env.MongoDbUrl
+ await mongoose.connect(MongoDbUrl,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
 .then(() => console.log("Database is running"));
 }
 
